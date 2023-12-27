@@ -30,6 +30,14 @@ const productSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  images: [{
+    filename: String, // Store the filename of the image
+    path: String,     // Store the path to the image in the media folder
+}],
+  status:{
+    type:Boolean,
+    default:true
+  }
 });
 
 const Product = mongoose.model('Product', productSchema);

@@ -5,7 +5,12 @@ import Product from "../Models/Products.Model.js";
 export const createProduct = async (req, res) => {
   try {
     const { name, description, price, category, stockQuantity } = req.body;
+    const images = req.files;
     const newProduct = new Product({ name, description, price, category, stockQuantity });
+    newProduct.images = images.map(file => ({
+      filename: file.filename,
+      path: file.path
+  }));
     const savedProduct = await newProduct.save();
     res.status(201).json(savedProduct);
   } catch (error) {

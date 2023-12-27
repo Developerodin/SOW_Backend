@@ -4,21 +4,22 @@ import {
   getCategories,
   updateCategory,
   deleteCategory,
+  getCategoriesById
 } from '../Controllers/Categories.Controller.js';
 
 
 const categoryRouter = express.Router();
 
 // Create a new category
-categoryRouter.post('/categories', createCategory);
+categoryRouter.post('/', createCategory);
 
 // Get all categories
-categoryRouter.get('/categories', getCategories);
-
+categoryRouter.get('/', getCategories);
+categoryRouter.get('/:id', getCategoriesById);
 // Update a category
-categoryRouter.put('/categories/:id', updateCategory);
+categoryRouter.put('/:id', updateCategory);
 
 // Delete a category
-categoryRouter.delete('/categories/:id', deleteCategory);
+categoryRouter.delete('/:id', deleteCategory);
 
 export default categoryRouter;

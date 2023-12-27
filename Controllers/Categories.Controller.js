@@ -23,6 +23,14 @@ export const getCategories = async (req, res) => {
   }
 };
 
+export const getCategoriesById = async (req, res) => {
+  try {
+    const categories = await Category.find({_id: req.params.id});
+    res.status(200).json(categories);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching categories' });
+  }
+}
 // Update a category
 export const updateCategory = async (req, res) => {
   try {
