@@ -12,6 +12,12 @@ import connection from './Configs/db.js';
 import multer from 'multer';
 
 import { createReadStream } from "fs";
+import adminRouter from './Routes/Admin.Router.js';
+import B2BUserRouter from './Routes/B2BUsers.Router.js';
+import userRouter from './Routes/Users.Router.js';
+import categoryRouter from './Routes/Categories.Router.js';
+import productRouter from './Routes/Products.Router.js';
+import complaintRouter from './Routes/Complains.Router.js';
 // import path from 'path';
 // import { fileURLToPath } from 'url';
 // import { dirname } from 'path';
@@ -100,6 +106,14 @@ app.get("/api/media/:imageName", (req, res) => {
   }
  
 });
+
+app.use("/admin",adminRouter);
+app.use("/api/b2b",B2BUserRouter)
+app.use("/api/users",userRouter)
+app.use("/api/category",categoryRouter)
+app.use("/api/product",productRouter)
+app.use("/api/complaint",complaintRouter)
+
 
 app.listen(port, () =>{
     connection();

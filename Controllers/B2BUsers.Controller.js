@@ -1,0 +1,56 @@
+import { B2BUser } from "../Models/B2BUsers.Model.js";
+
+
+// Create a new user
+export const createB2BUser = async (req, res) => {
+  try {
+    const newUser = new B2BUser(req.body);
+    const savedUser = await newUser.save();
+    res.status(201).json(savedUser);
+  } catch (error) {
+    res.status(500).json({ error: 'Error creating user' });
+  }
+};
+
+// Get all users
+export const getB2BUsers = async (req, res) => {
+  try {
+    const users = await B2BUser.find();
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching users' });
+  }
+};
+
+// Get a specific user by ID
+export const getB2BUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await B2BUser.findById(id);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching user by ID' });
+  }
+};
+
+// Update a user
+export const updateB2BUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedUser = await B2BUser.findByIdAndUpdate(id, req.body, { new: true });
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ error: 'Error updating user' });
+  }
+};
+
+// Delete a user
+export const deleteB2BUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedUser = await B2BUser.findByIdAndDelete(id);
+    res.status(200).json(deletedUser);
+  } catch (error) {
+    res.status(500).json({ error: 'Error deleting user' });
+  }
+};
