@@ -90,21 +90,9 @@ app.get('/', (req, res) => {
 
 
 app.get("/api/media/:imageName", (req, res) => {
-  try{
-    const imageName = req.params.imageName;
-    const readStream = createReadStream(`media/${imageName}`);
-    if(!readStream){
-      readStream.pipe(res);
-    }
-    else{
-      res.send("No image found")
-    }
-    
-  }
-  catch(err){
-   res.send(err)
-  }
- 
+  const imageName = req.params.imageName;
+  const readStream = createReadStream(`media/${imageName}`);
+  readStream.pipe(res);
 });
 
 app.use("/admin",adminRouter);
