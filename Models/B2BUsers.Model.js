@@ -52,6 +52,21 @@ const userSchema = new mongoose.Schema({
         required: [true, 'A user must have a country'],
         
     },
+    registerAs: {
+        type: String,
+        required: [true, 'A user must have a registerAs'],
+        
+    },
+    panNo: {
+        type: String,
+        required: [true, 'A user must have a panNo'],
+        
+    },
+    adharData: {
+        type: Object,
+        required: [true, 'A user must have a adharData'],
+        
+    },
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,

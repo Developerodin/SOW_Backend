@@ -11,18 +11,18 @@ import {
 const B2BUserRouter = express.Router();
 
 // Create a new B2B user
-B2BUserRouter.post('/b2busers', createB2BUser);
+B2BUserRouter.post('/', createB2BUser);
 
 // Get all B2B users
-B2BUserRouter.get('/b2busers', getB2BUsers);
+B2BUserRouter.get('/', getB2BUsers);
 
 // Get a specific B2B user by ID
-B2BUserRouter.get('/b2busers/:id', getB2BUserById);
+B2BUserRouter.get('/:id', getB2BUserById);
 
 // Update a B2B user
-B2BUserRouter.put('/b2busers/:id', updateB2BUser);
+B2BUserRouter.put('/:id', updateB2BUser);
 
 // Delete a B2B user
-B2BUserRouter.delete('/b2busers/:id', deleteB2BUser);
+B2BUserRouter.delete('/:id', deleteB2BUser);
 
 export default B2BUserRouter;

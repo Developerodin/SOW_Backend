@@ -19,18 +19,18 @@ const upload = multer({ storage: storage });
 const userRouter = express.Router();
 
 // Create a new user
-userRouter.post('/users',upload.array('images', 1), createUser);
+userRouter.post('/',upload.array('images', 1), createUser);
 
 // Get all users
-userRouter.get('/users', getUsers);
+userRouter.get('/', getUsers);
 
 // Get a specific user by ID
-userRouter.get('/users/:id', getUserById);
+userRouter.get('/:id', getUserById);
 
 // Update a user
-userRouter.put('/users/:id', updateUser);
+userRouter.put('/:id', updateUser);
 
 // Delete a user
-userRouter.delete('/users/:id', deleteUser);
+userRouter.delete('/:id', deleteUser);
 
 export default userRouter;

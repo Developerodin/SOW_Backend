@@ -5,6 +5,7 @@ import { User } from "../Models/Users.Model.js";
 export const createUser = async (req, res) => {
   try {
     const newUser = new User(req.body);
+  
     const images = req.files;
     newUser.images = images.map(file => ({
       filename: file.filename,
@@ -13,7 +14,10 @@ export const createUser = async (req, res) => {
     const savedUser = await newUser.save();
     res.status(201).json(savedUser);
   } catch (error) {
-    res.status(500).json({ error: 'Error creating user' });
+    console.log(
+      "Error ===>",error
+    )
+    res.status(500).json({ error });
   }
 };
 
