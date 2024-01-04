@@ -4,8 +4,13 @@ import { B2BUser } from "../Models/B2BUsers.Model.js";
 // Create a new user
 export const createB2BUser = async (req, res) => {
   try {
-    const newUser = new B2BUser(req.body);
-    const savedUser = await newUser.save();
+    const images = req.files;
+    const newUser = req.body;
+    newUser.images = images.map(file => ({
+      filename: file.filename,
+      path: file.path
+  }));
+    const savedUser = await B2BUser.create(newUser);
     res.status(201).json(savedUser);
   } catch (error) {
     res.status(500).json({ error: 'Error creating user' });

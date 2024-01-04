@@ -11,13 +11,17 @@ import connection from './Configs/db.js';
 
 import multer from 'multer';
 
-import { createReadStream } from "fs";
+
 import adminRouter from './Routes/Admin.Router.js';
 import B2BUserRouter from './Routes/B2BUsers.Router.js';
 import userRouter from './Routes/Users.Router.js';
 import categoryRouter from './Routes/Categories.Router.js';
 import productRouter from './Routes/Products.Router.js';
 import complaintRouter from './Routes/Complains.Router.js';
+import { createReadStream, promises as fsPromises } from 'fs';
+import { resolve, dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+import { createB2BUser } from './Controllers/B2BUsers.Controller.js';
 // import path from 'path';
 // import { fileURLToPath } from 'url';
 // import { dirname } from 'path';
@@ -65,7 +69,7 @@ app.get('/', (req, res) => {
 // app.post('/student_login',loginUser)
 // app.post('/student_signup',upload.array('images', 1),createUser)
 // app.post('/teacher_login',loginTeacher)
-// app.post('/teacher_signup',upload.array('images', 2),createTeacher)
+app.post('/b2b',upload.array('images', 4),createB2BUser)
 // app.use('/admin',adminRouter)
 
 // JWT Middleware
@@ -88,12 +92,40 @@ app.get('/', (req, res) => {
   }
 };
 
-
-app.get("/api/media/:imageName", (req, res) => {
+const mediaPath = 'media/';
+app.get('/api/media/:imageName', async (req, res) => {
   const imageName = req.params.imageName;
-  const readStream = createReadStream(`media/${imageName}`);
-  readStream.pipe(res);
+  const imagePath = join(mediaPath, imageName);
+
+  // Check if the requested image exists
+  if (await fileExists(imagePath)) {
+    const readStream = createReadStream(imagePath);
+    readStream.pipe(res);
+  } else {
+    // If the image doesn't exist, serve a default image
+    const currentModulePath = fileURLToPath(import.meta.url);
+    const currentModuleDir = dirname(currentModulePath);
+    const defaultImagePath = resolve(currentModuleDir, 'media', 'default-image.jpg');
+    const defaultImageStream = createReadStream(defaultImagePath);
+
+    defaultImageStream.on('error', (err) => {
+      res.status(404).send('Default image not found');
+    });
+
+    defaultImageStream.pipe(res);
+  }
 });
+
+async function fileExists(filePath) {
+  try {
+    await fsPromises.access(filePath);
+    console.log("File exists");
+    return true;
+  } catch (err) {
+    console.log("File does not exist");
+    return false;
+  }
+}
 
 app.use("/admin",adminRouter);
 app.use("/api/b2b",B2BUserRouter)
