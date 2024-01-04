@@ -6,17 +6,17 @@ import validator from 'validator';
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, 'A user must have a name'],
-        maxlength: [20, 'Username must be less than or equal to 10 characters.']
+        // required: [true, 'A user must have a name'],
+        // maxlength: [20, 'Username must be less than or equal to 10 characters.']
     },
     gender: {
         type: String
     },
     email: {
         type: String,
-        required: [true, 'Please provide your email'],
-        unique: true,
-        validate: [validator.isEmail, 'Please provide a valid email']
+        // required: [true, 'Please provide your email'],
+        // unique: true,
+        // validate: [validator.isEmail, 'Please provide a valid email']
     },
     password: {
         type: String,
@@ -25,46 +25,46 @@ const userSchema = new mongoose.Schema({
     },
     mobile: {
         type: String,
-        required: [true, 'Please provide a mobile number'],
-        minlength: 10
+        // required: [true, 'Please provide a mobile number'],
+        // minlength: 10
     },
     dob: {
         type: String,
-        required: [true, 'Please provide  data of birth'],
+        // required: [true, 'Please provide  data of birth'],
         
     },
     Address:{
         type: String,
-        required: [true, 'Please provide  address'],
+        // required: [true, 'Please provide  address'],
     },
     city: {
         type: String,
-        required: [true, 'A user must have a city'],
+        // required: [true, 'A user must have a city'],
         
     },
     pincode: {
         type: String,
-        required: [true, 'A user must have a pincode'],
+        // required: [true, 'A user must have a pincode'],
         
     },
     country: {
         type: String,
-        required: [true, 'A user must have a country'],
+        // required: [true, 'A user must have a country'],
         
     },
     registerAs: {
         type: String,
-        required: [true, 'A user must have a registerAs'],
+        // required: [true, 'A user must have a registerAs'],
         
     },
     panNo: {
         type: String,
-        required: [true, 'A user must have a panNo'],
+        // required: [true, 'A user must have a panNo'],
         
     },
     adharData: {
         type: Object,
-        required: [true, 'A user must have a adharData'],
+        // required: [true, 'A user must have a adharData'],
         
     },
     passwordChangedAt: Date,
