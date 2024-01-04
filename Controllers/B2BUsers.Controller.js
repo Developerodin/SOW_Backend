@@ -4,7 +4,7 @@ import { B2BUser } from "../Models/B2BUsers.Model.js";
 // Create a new user
 export const createB2BUser = async (req, res) => {
   try {
-    console.log("Creating  b2b user...");
+    console.log("Creating  b2b user...",req.files);
     const images = req.files || [];
     const newUser = req.body;
     const AdharData = req.body.adharData;
