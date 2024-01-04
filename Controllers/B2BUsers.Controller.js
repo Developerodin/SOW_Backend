@@ -6,6 +6,9 @@ export const createB2BUser = async (req, res) => {
   try {
     const images = req.files;
     const newUser = req.body;
+    const AdharData = req.body.adharData;
+    const Adhar = JSON.parse(AdharData)
+    newUser.adharData = Adhar
     newUser.images = images.map(file => ({
       filename: file.filename,
       path: file.path
