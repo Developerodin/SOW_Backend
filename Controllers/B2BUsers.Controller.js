@@ -8,12 +8,17 @@ export const createB2BUser = async (req, res) => {
     const images = req.files || [];
     const newUser = req.body;
     const AdharData = req.body.adharData;
+    const sub_category_Data = req.body.sub_category;
     const Adhar = JSON.parse(AdharData)
+    const sub_category = JSON.parse(sub_category_Data)
     newUser.adharData = Adhar
     newUser.images = images.map(file => ({
       filename: file.filename,
       path: file.path
   }));
+
+  newUser.sub_category = sub_category
+
   console.log("new User in b2b", newUser);
     const savedUser = await B2BUser.create(newUser);
     res.status(201).json(savedUser);

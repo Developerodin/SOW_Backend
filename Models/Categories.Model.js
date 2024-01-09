@@ -7,6 +7,13 @@ const categorySchema = new mongoose.Schema({
     trim: true,
     unique: true,
   },
+  sub_category:[
+    {
+      name: String, // Store the filename of the image
+      price: String,
+      unit:String     // Store the path to the image in the media folder
+  }
+  ],
   description: {
     type: String,
     trim: true,
