@@ -5,6 +5,10 @@ import {
     getB2BUserById,
     updateB2BUser,
     deleteB2BUser,
+    addSubcategory,
+    updateSubcategoryByIndex,
+    deleteSubcategoryByIndex,
+    updateCategory,
 } from '../Controllers/B2BUsers.Controller.js';
 
 
@@ -24,5 +28,16 @@ B2BUserRouter.put('/:id', updateB2BUser);
 
 // Delete a B2B user
 B2BUserRouter.delete('/:id', deleteB2BUser);
+
+B2BUserRouter.post('/:userId/subcategories', addSubcategory);
+
+// Update Subcategory by Index
+B2BUserRouter.patch('/:userId/subcategories/:subcategoryIndex', updateSubcategoryByIndex);
+
+// Delete Subcategory by Index
+B2BUserRouter.delete('/:userId/subcategories/:subcategoryIndex', deleteSubcategoryByIndex);
+
+// Update Category
+B2BUserRouter.patch('/:userId/category', updateCategory);
 
 export default B2BUserRouter;
