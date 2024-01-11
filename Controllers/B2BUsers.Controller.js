@@ -72,7 +72,7 @@ export const deleteB2BUser = async (req, res) => {
 };
 
 
-export const addSubcategory = async (req, res) => {
+export const addB2BSubcategory = async (req, res) => {
   try {
     const { userId } = req.params;
     const { name, price, unit } = req.body;
@@ -98,7 +98,7 @@ export const addSubcategory = async (req, res) => {
   }
 };
 
-export const updateSubcategoryByIndex = async (req, res) => {
+export const updateB2BSubcategoryByIndex = async (req, res) => {
   try {
     const { userId, subcategoryIndex } = req.params;
     const { name, price, unit } = req.body;
@@ -132,7 +132,7 @@ export const updateSubcategoryByIndex = async (req, res) => {
   }
 };
 
-export const deleteSubcategoryByIndex = async (req, res) => {
+export const deleteB2BSubcategoryByIndex = async (req, res) => {
   try {
     const { userId, subcategoryIndex } = req.params;
 
@@ -162,7 +162,7 @@ export const deleteSubcategoryByIndex = async (req, res) => {
 };
 
 
-export const updateCategory = async (req, res) => {
+export const updateB2BCategory = async (req, res) => {
   try {
     const { userId } = req.params;
     const { category } = req.body;
