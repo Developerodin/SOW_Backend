@@ -22,6 +22,7 @@ import { createReadStream, promises as fsPromises } from 'fs';
 import { resolve, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { createB2BUser } from './Controllers/B2BUsers.Controller.js';
+import B2BorderRouter from './Routes/B2BOrders.Router.js';
 // import path from 'path';
 // import { fileURLToPath } from 'url';
 // import { dirname } from 'path';
@@ -129,6 +130,7 @@ async function fileExists(filePath) {
 
 app.use("/admin",adminRouter);
 app.use("/api/b2b",B2BUserRouter)
+app.use("/api/b2b_orders",B2BorderRouter)
 app.use("/api/users",userRouter)
 app.use("/api/category",categoryRouter)
 app.use("/api/product",productRouter)
