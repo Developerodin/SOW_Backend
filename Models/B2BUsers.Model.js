@@ -91,6 +91,10 @@ const userSchema = new mongoose.Schema({
           price: String,
           unit:String 
       }],
+      otp:{
+        type:String,
+        required:false
+      }
     
 },
     {

@@ -44,8 +44,8 @@ export const generateOTPController = async (req, res) => {
     const otp = Math.floor(1000 + Math.random() * 9000);
 
     // Save OTP to user document in MongoDB
-    const user = await B2BUser.findOneAndUpdate({ mobile: mobile_number }, { $set: { otp } });
-
+    const user = await B2BUser.findOneAndUpdate({ mobile: mobile_number }, { $set: { otp } },{ new: true });
+      //  console.log("user get otp", user)
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
