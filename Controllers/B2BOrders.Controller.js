@@ -15,7 +15,8 @@ export const createB2BOrder = async (req, res) => {
 // Get all B2B orders
 export const getB2BOrders = async (req, res) => {
   try {
-    const orders = await B2BOrder.find();
+    const orders = await B2BOrder.find().populate('from')
+    .populate('to').exec();
     res.status(200).json(orders);
   } catch (error) {
     res.status(500).json({ error: 'Error fetching B2B orders' });

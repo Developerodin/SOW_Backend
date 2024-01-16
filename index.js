@@ -23,6 +23,8 @@ import { resolve, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { createB2BUser } from './Controllers/B2BUsers.Controller.js';
 import B2BorderRouter from './Routes/B2BOrders.Router.js';
+import { createUser } from './Controllers/Users.Controller.js';
+import ordersRouter from './Routes/Orders.Router.js';
 // import path from 'path';
 // import { fileURLToPath } from 'url';
 // import { dirname } from 'path';
@@ -71,6 +73,7 @@ app.get('/', (req, res) => {
 // app.post('/student_signup',upload.array('images', 1),createUser)
 // app.post('/teacher_login',loginTeacher)
 app.post('/b2b',upload.array('images', 4),createB2BUser)
+app.post('/user',upload.array('images', 1), createUser);
 // app.use('/admin',adminRouter)
 
 // JWT Middleware
@@ -135,7 +138,7 @@ app.use("/api/users",userRouter)
 app.use("/api/category",categoryRouter)
 app.use("/api/product",productRouter)
 app.use("/api/complaint",complaintRouter)
-
+app.use('/api/orders',ordersRouter)
 
 app.listen(port, () =>{
     connection();

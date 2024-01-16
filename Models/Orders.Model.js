@@ -3,21 +3,25 @@ import mongoose from 'mongoose';
 const orderSchema = new mongoose.Schema({
   customer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'Users',
     required: true,
   },
-  products: [{
-    product: {
+  details: {
+    category: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Product',
-      required: true,
+    ref: 'Category',
+    required: true,
+    },
+    sub_category:{
+        type: String,
+        required: true,
     },
     quantity: {
       type: Number,
       required: true,
       min: 1,
     },
-  }],
+  },
   totalAmount: {
     type: Number,
     required: true,
@@ -26,6 +30,11 @@ const orderSchema = new mongoose.Schema({
   orderDate: {
     type: Date,
     default: Date.now,
+  },
+  status: {
+    type: String,
+    enum: ['not assigned', 'assigned', 'in progress', 'completed'],
+    default: 'not assigned',
   },
 });
 

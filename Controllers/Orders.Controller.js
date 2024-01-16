@@ -1,47 +1,85 @@
 import Order from "../Models/Orders.Model.js";
 
+export const getAllOrders = async (req, res) => {
+  try {
+    const orders = await Order.find().populate('customer details.category').exec();
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
-// Create a new order
+// Controller to create a new order
 export const createOrder = async (req, res) => {
+  const { customer, details, totalAmount, orderDate, status } = req.body;
+
   try {
-    const { customer, products, totalAmount } = req.body;
-    const newOrder = new Order({ customer, products, totalAmount });
+    const newOrder = new Order({
+      customer,
+      details,
+      totalAmount,
+      orderDate,
+      status,
+    });
+
     const savedOrder = await newOrder.save();
-    res.status(201).json(savedOrder);
+    const populatedOrder = await savedOrder.populate('customer details.category').execPopulate();
+    res.status(201).json(populatedOrder);
   } catch (error) {
-    res.status(500).json({ error: 'Error creating order' });
+    res.status(400).json({ message: error.message });
   }
 };
 
-// Get all orders
-export const getOrders = async (req, res) => {
+// Controller to get a specific order by ID
+export const getOrderById = async (req, res) => {
+  const { id } = req.params;
+
   try {
-    const orders = await Order.find().populate('customer').populate('products.product');
-    res.status(200).json(orders);
+    const order = await Order.findById(id).populate('customer details.category');
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+    res.json(order);
   } catch (error) {
-    res.status(500).json({ error: 'Error fetching orders' });
+    res.status(500).json({ message: error.message });
   }
 };
 
-// Update an order
+// Controller to update a specific order by ID
 export const updateOrder = async (req, res) => {
+  const { id } = req.params;
+  const { details, totalAmount, orderDate, status } = req.body;
+
   try {
-    const { id } = req.params;
-    const { products, totalAmount } = req.body;
-    const updatedOrder = await Order.findByIdAndUpdate(id, { products, totalAmount }, { new: true });
-    res.status(200).json(updatedOrder);
+    const updatedOrder = await Order.findByIdAndUpdate(
+      id,
+      { details, totalAmount, orderDate, status },
+      { new: true }
+    ).populate('customer details.category');
+
+    if (!updatedOrder) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    res.json(updatedOrder);
   } catch (error) {
-    res.status(500).json({ error: 'Error updating order' });
+    res.status(500).json({ message: error.message });
   }
 };
 
-// Delete an order
+// Controller to delete a specific order by ID
 export const deleteOrder = async (req, res) => {
+  const { id } = req.params;
+
   try {
-    const { id } = req.params;
-    const deletedOrder = await Order.findByIdAndDelete(id);
-    res.status(200).json(deletedOrder);
+    const deletedOrder = await Order.findByIdAndDelete(id).populate('customer details.category');
+
+    if (!deletedOrder) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    res.json(deletedOrder);
   } catch (error) {
-    res.status(500).json({ error: 'Error deleting order' });
+    res.status(500).json({ message: error.message });
   }
 };
