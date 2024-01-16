@@ -1,3 +1,4 @@
+import axios from "axios";
 import { B2BUser } from "../Models/B2BUsers.Model.js";
 
 // smsService.js
@@ -7,24 +8,23 @@ const sendOtpSMS = async (mobileNumber, otp) => {
   const apiKey = 'mk9FmduXikm530fTCyirdg';
   const message = `Your One Time Password is: ${otp}. Thanks SMSINDIAHUB`;
 
-  const url = "http://cloud.smsindiahub.in/vendorsms/pushsms.aspx";
+  const url = 'http://cloud.smsindiahub.in/vendorsms/pushsms.aspx';
   const params = {
     APIKey: apiKey,
     msisdn: `91${mobileNumber}`,
     sid: 'AREPLY',
     msg: message,
     fl: 0,
-    gwid: 2
+    gwid: 2,
   };
 
   const apiUrl = `${url}?${new URLSearchParams(params).toString()}`;
 
   try {
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-    //  console.log("Smas Data ====>",data)
+    const response = await axios.get(apiUrl);
+
     // You may need to adjust the condition based on the actual response format
-    if (data.ErrorCode === '000') {
+    if (response.data.ErrorCode === '000') {
       return { success: true };
     } else {
       return { success: false, error: 'Failed to send SMS' };
