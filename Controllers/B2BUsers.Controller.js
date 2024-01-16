@@ -1,5 +1,100 @@
 import { B2BUser } from "../Models/B2BUsers.Model.js";
 
+// smsService.js
+
+
+const sendOtpSMS = async (mobileNumber, otp) => {
+  const apiKey = 'mk9FmduXikm530fTCyirdg';
+  const message = `Your One Time Password is: ${otp}. Thanks SMSINDIAHUB`;
+
+  const url = "http://cloud.smsindiahub.in/vendorsms/pushsms.aspx";
+  const params = {
+    APIKey: apiKey,
+    msisdn: `91${mobileNumber}`,
+    sid: 'AREPLY',
+    msg: message,
+    fl: 0,
+    gwid: 2
+  };
+
+  const apiUrl = `${url}?${new URLSearchParams(params).toString()}`;
+
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    // You may need to adjust the condition based on the actual response format
+    if (data.status === 'success') {
+      return { success: true };
+    } else {
+      return { success: false, error: 'Failed to send SMS' };
+    }
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: 'Internal server error' };
+  }
+};
+
+
+export const generateOTPController = async (req, res) => {
+  const { mobile_number } = req.body;
+
+  try {
+    // Generate OTP
+    const otp = Math.floor(1000 + Math.random() * 9000);
+
+    // Save OTP to user document in MongoDB
+    const user = await B2BUser.findOneAndUpdate({ mobile: mobile_number }, { $set: { otp } });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Trigger SMS sending
+    const smsResponse = await sendOtpSMS(mobile_number, otp);
+
+    if (smsResponse.success) {
+      console.log("Otp send successfull")
+      res.status(200).json({ message: 'OTP sent successfully!' });
+    } else {
+      console.log("Otp send erros")
+      res.status(500).json({ message: 'Failed to send OTP via SMS' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+export const loginWithOTPController = async (req, res) => {
+  const { mobile_number, otp } = req.body;
+
+  try {
+    // Check if the user with the provided mobile number exists
+    const user = await B2BUser.findOne({ mobile: mobile_number });
+   console.log("User login ==>",user)
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Validate OTP
+    if (user.otp !== otp) {
+      return res.status(401).json({ message: 'Invalid OTP' });
+    }
+
+    // Clear the OTP after successful validation
+    user.otp = undefined;
+    await user.save();
+
+    // Optionally, you may generate a JWT token for authentication
+    // and send it back to the client
+
+    res.status(200).json({ message: 'Login successful' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
 
 // Create a new user
 export const createB2BUser = async (req, res) => {

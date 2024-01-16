@@ -9,11 +9,18 @@ import {
     updateB2BSubcategoryByIndex,
     deleteB2BSubcategoryByIndex,
     updateB2BCategory,
+    generateOTPController,
+    loginWithOTPController,
 } from '../Controllers/B2BUsers.Controller.js';
 
 
 const B2BUserRouter = express.Router();
 
+
+B2BUserRouter.post('/generate-otp', generateOTPController);
+
+// Endpoint to validate OTP and login the user
+B2BUserRouter.post('/login-with-otp', loginWithOTPController);
 // Create a new B2B user
 B2BUserRouter.post('/', createB2BUser);
 
