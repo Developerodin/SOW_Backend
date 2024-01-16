@@ -22,9 +22,9 @@ const sendOtpSMS = async (mobileNumber, otp) => {
   try {
     const response = await fetch(apiUrl);
     const data = await response.json();
-
+    //  console.log("Smas Data ====>",data)
     // You may need to adjust the condition based on the actual response format
-    if (data.status === 'success') {
+    if (data.ErrorCode === '000') {
       return { success: true };
     } else {
       return { success: false, error: 'Failed to send SMS' };
@@ -38,7 +38,7 @@ const sendOtpSMS = async (mobileNumber, otp) => {
 
 export const generateOTPController = async (req, res) => {
   const { mobile_number } = req.body;
-
+  console.log("mobile", mobile_number)
   try {
     // Generate OTP
     const otp = Math.floor(1000 + Math.random() * 9000);
@@ -52,7 +52,7 @@ export const generateOTPController = async (req, res) => {
 
     // Trigger SMS sending
     const smsResponse = await sendOtpSMS(mobile_number, otp);
-
+      console.log("Sms Resposne ===>",smsResponse)
     if (smsResponse.success) {
       console.log("Otp send successfull")
       res.status(200).json({ message: 'OTP sent successfully!' });
