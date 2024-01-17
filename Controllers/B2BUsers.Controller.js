@@ -76,7 +76,7 @@ export const loginWithOTPController = async (req, res) => {
     const user = await B2BUser.findOne({ mobile: mobile_number });
    console.log("User login ==>",user)
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(200).json({ message: 'User not found' });
     }
 
     // Validate OTP
