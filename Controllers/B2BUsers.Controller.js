@@ -5,26 +5,28 @@ import { B2BUser } from "../Models/B2BUsers.Model.js";
 
 
 const sendOtpSMS = async (mobileNumber, otp) => {
-  const apiKey = 'mk9FmduXikm530fTCyirdg';
-  const message = `Your One Time Password is: ${otp}. Thanks SMSINDIAHUB`;
 
-  const url = 'http://cloud.smsindiahub.in/vendorsms/pushsms.aspx';
+  console.log("send otp ==>",mobileNumber,otp);
+  const authorization = 'fXeO8yi0IF29xhjVN5LTB6slYdRrEkSJv3ZtWcMHaoqbPDuAUmLuihz0I8CkVM34y7KJxEeGlFBsSvQt';
+  const route = `otp`;
+  const variablesValues = otp;
+  const flash = '0';
+
+  const url = 'https://www.fast2sms.com/dev/bulkV2';
+
   const params = {
-    APIKey: apiKey,
-    msisdn: `91${mobileNumber}`,
-    sid: 'AREPLY',
-    msg: message,
-    fl: 0,
-    gwid: 2,
+    authorization,
+    route,
+    variables_values: variablesValues,
+    flash,
+    numbers: `${mobileNumber}`, // Assuming the mobile number should include the country code (e.g., +91 for India)
   };
 
-  const apiUrl = `${url}?${new URLSearchParams(params).toString()}`;
-
   try {
-    const response = await axios.get(apiUrl);
+    const response = await axios.get(url, { params });
 
     // You may need to adjust the condition based on the actual response format
-    if (response.data.ErrorCode === '000') {
+    if (response.data.return === true) {
       return { success: true };
     } else {
       return { success: false, error: 'Failed to send SMS' };
