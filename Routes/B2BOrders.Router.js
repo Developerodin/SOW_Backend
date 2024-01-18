@@ -19,7 +19,7 @@ B2BorderRouter.put('/:id', updateB2BOrder);
 // Delete B2B order
 B2BorderRouter.delete('/:id', deleteB2BOrder);
 
-B2BorderRouter.get("/from/:id",getOrdersByFromUserId)
-B2BorderRouter.get("/to/:id",getOrdersByToUserId)
+B2BorderRouter.get("/from/:userId",getOrdersByFromUserId)
+B2BorderRouter.get("/to/:userId",getOrdersByToUserId)
 
 export default B2BorderRouter;
