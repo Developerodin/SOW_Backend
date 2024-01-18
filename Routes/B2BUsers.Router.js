@@ -11,6 +11,7 @@ import {
     updateB2BCategory,
     generateOTPController,
     loginWithOTPController,
+    getUserCategoryAndSubcategory,
 } from '../Controllers/B2BUsers.Controller.js';
 
 
@@ -46,5 +47,7 @@ B2BUserRouter.delete('/:userId/subcategories/:subcategoryIndex', deleteB2BSubcat
 
 // Update Category
 B2BUserRouter.patch('/:userId/category', updateB2BCategory);
+
+B2BUserRouter.get('/:userId/category-subcategory', getUserCategoryAndSubcategory);
 
 export default B2BUserRouter;

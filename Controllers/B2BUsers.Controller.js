@@ -287,3 +287,26 @@ export const updateB2BCategory = async (req, res) => {
     res.status(500).json({ error: 'Error updating category' });
   }
 };
+
+export const getUserCategoryAndSubcategory = async (req, res) => {
+  try {
+      const userId = req.params.userId; // Assuming you pass the user ID as a route parameter
+
+      // Find the user by ID
+      const user = await B2BUser.findById(userId);
+
+      // If the user is not found, return an error
+      if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Extract category and subcategory from the user object
+      const { category, sub_category } = user;
+
+      // Return the category and subcategory in the response
+      res.status(200).json({ category, sub_category });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
