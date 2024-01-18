@@ -26,7 +26,8 @@ export const getB2BOrders = async (req, res) => {
 // Get B2B order by ID
 export const getB2BOrderById = async (req, res) => {
   try {
-    const order = await B2BOrder.findById(req.params.id);
+    const order = await B2BOrder.findById(req.params.id) .populate('from')
+    .populate('to').exec();
     if (!order) {
       return res.status(404).json({ error: 'Order not found' });
     }
