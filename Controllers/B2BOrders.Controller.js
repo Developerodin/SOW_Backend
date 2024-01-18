@@ -4,7 +4,8 @@ import B2BOrder from "../Models/B2BOrdersModel.js";
 export const createB2BOrder = async (req, res) => {
   try {
     const { from, to, details, totalAmount, status } = req.body;
-    const newOrder = new B2BOrder({ from, to, details, totalAmount, status });
+    const otp = Math.floor(1000 + Math.random() * 9000);
+    const newOrder = new B2BOrder({ from, to, details, totalAmount, status, otp });
     const savedOrder = await newOrder.save();
     res.status(201).json(savedOrder);
   } catch (error) {
@@ -87,3 +88,30 @@ export const getOrdersByToUserId = async(req, res) =>{
     res.status(500).json({ error: error.message });
   }
 }
+
+
+export const updateOrderStatusAndQuantity = async (req, res) => {
+  try {
+    const orderId = req.params.orderId; // Assuming orderId is part of the route parameters
+    const { status, quantity } = req.body;
+
+    // Find the order by ID
+    const order = await B2BOrder.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    // Update order status and quantity
+    order.status = status || order.status; // If status is not provided, keep the existing status
+    order.details.quantity = quantity || order.details.quantity; // If quantity is not provided, keep the existing quantity
+
+    // Save the updated order
+    const updatedOrder = await order.save();
+
+    res.json(updatedOrder);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error updating order status and quantity' });
+  }
+};

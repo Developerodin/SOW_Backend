@@ -40,6 +40,10 @@ const orderSchema = new mongoose.Schema({
     enum: ['pending', 'completed'],
     default: 'pending',
   },
+  otp: {
+    type: Number,
+    required: true,
+  },
 });
 
 const B2BOrder = mongoose.model('B2BOrders', orderSchema);
