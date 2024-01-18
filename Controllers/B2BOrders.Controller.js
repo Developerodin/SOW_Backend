@@ -58,3 +58,29 @@ export const deleteB2BOrder = async (req, res) => {
     res.status(500).json({ error: 'Error deleting B2B order' });
   }
 };
+
+
+
+export const getOrdersByFromUserId = async(req, res) =>{
+  try {
+    const userId = req.params.userId;
+    const query = { from: userId };
+
+    const orders = await B2BOrder.find(query);
+    res.json({ orders });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export const getOrdersByToUserId = async(req, res) =>{
+  try {
+    const userId = req.params.userId;
+    const query = { to: userId };
+
+    const orders = await B2BOrder.find(query);
+    res.json({ orders });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}

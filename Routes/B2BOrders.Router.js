@@ -1,5 +1,5 @@
 import express from 'express';
-import { createB2BOrder, deleteB2BOrder, getB2BOrderById, getB2BOrders, updateB2BOrder } from '../Controllers/B2BOrders.Controller.js';
+import { createB2BOrder, deleteB2BOrder, getB2BOrderById, getB2BOrders, getOrdersByFromUserId, getOrdersByToUserId, updateB2BOrder } from '../Controllers/B2BOrders.Controller.js';
 
 
 const B2BorderRouter = express.Router();
@@ -18,5 +18,8 @@ B2BorderRouter.put('/:id', updateB2BOrder);
 
 // Delete B2B order
 B2BorderRouter.delete('/:id', deleteB2BOrder);
+
+B2BorderRouter.get("/from/:id",getOrdersByFromUserId)
+B2BorderRouter.get("/to/:id",getOrdersByToUserId)
 
 export default B2BorderRouter;
