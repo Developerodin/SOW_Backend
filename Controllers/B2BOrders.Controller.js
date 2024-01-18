@@ -80,7 +80,8 @@ export const getOrdersByToUserId = async(req, res) =>{
     const userId = req.params.userId;
     const query = { to: userId };
 
-    const orders = await B2BOrder.find(query);
+    const orders = await B2BOrder.find(query).populate('from')
+    .populate('to').exec();
     res.json({ orders });
   } catch (error) {
     res.status(500).json({ error: error.message });
