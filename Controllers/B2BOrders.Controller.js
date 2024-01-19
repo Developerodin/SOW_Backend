@@ -104,7 +104,7 @@ export const updateOrderStatusAndQuantity = async (req, res) => {
 
     // Update order status and quantity
     order.status = status || order.status; // If status is not provided, keep the existing status
-    order.details.quantity = quantity || order.details.quantity; // If quantity is not provided, keep the existing quantity
+    // order.details.quantity = quantity || order.details.quantity; // If quantity is not provided, keep the existing quantity
 
     // Save the updated order
     const updatedOrder = await order.save();
