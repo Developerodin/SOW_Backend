@@ -49,7 +49,7 @@ export const generateOTPController = async (req, res) => {
     const user = await B2BUser.findOneAndUpdate({ mobile: mobile_number }, { $set: { otp } },{ new: true });
       //  console.log("user get otp", user)
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(200).json({ message: 'User not found' });
     }
 
     // Trigger SMS sending
