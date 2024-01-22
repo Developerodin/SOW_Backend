@@ -28,11 +28,6 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Please provide a mobile number'],
         minlength: 10
     },
-    dob: {
-        type: String,
-        required: [true, 'Please provide  data of birth'],
-        
-    },
     Address:{
         type: String,
         required: [true, 'Please provide  address'],
