@@ -37,13 +37,17 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['pending', 'completed'],
+    enum: ['pending', 'completed','rejected' ,'in-progress','canceled'],
     default: 'pending',
   },
   otp: {
     type: Number,
     required: true,
   },
+  description: {
+    type: String,
+    required: false,
+  }
 });
 
 const B2BOrder = mongoose.model('B2BOrders', orderSchema);
