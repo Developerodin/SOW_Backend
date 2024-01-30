@@ -103,22 +103,24 @@ export const loginWithOTPController = async (req, res) => {
 // Create a new user
 export const createB2BUser = async (req, res) => {
   try {
-    console.log("Creating  b2b user...",req.files);
+    console.log("Creating  b2b user...", req.files);
     const images = req.files || [];
     const newUser = req.body;
-    const AdharData = req.body.adharData;
-    const sub_category_Data = req.body.sub_category;
-    const Adhar = JSON.parse(AdharData)
-    const sub_category = JSON.parse(sub_category_Data)
-    newUser.adharData = Adhar
-    newUser.images = images.map(file => ({
+    const adharData = req.body.adharData;
+    const categoriesData = req.body.categories;
+
+    const adhar = JSON.parse(adharData);
+    const categories = JSON.parse(categoriesData);
+
+    newUser.adharData = adhar;
+    newUser.images = images.map((file) => ({
       filename: file.filename,
-      path: file.path
-  }));
+      path: file.path,
+    }));
 
-  newUser.sub_category = sub_category
+    newUser.categories = categories;
 
-  console.log("new User in b2b", newUser);
+    console.log("new User in b2b", newUser);
     const savedUser = await B2BUser.create(newUser);
     res.status(201).json(savedUser);
   } catch (error) {
@@ -264,9 +266,9 @@ export const deleteB2BSubcategoryByIndex = async (req, res) => {
 export const updateB2BCategory = async (req, res) => {
   try {
     const { userId } = req.params;
-    const { category } = req.body;
+    const { categories } = req.body;
 
-    if (!userId || !category) {
+    if (!userId || !categories) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -276,37 +278,37 @@ export const updateB2BCategory = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Update category
-    user.category = category;
+    // Update categories
+    user.categories = categories;
 
     await user.save();
 
     res.status(200).json(user);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error updating category' });
+    res.status(500).json({ error: 'Error updating categories' });
   }
 };
 
 export const getUserCategoryAndSubcategory = async (req, res) => {
   try {
-      const userId = req.params.userId; // Assuming you pass the user ID as a route parameter
+    const userId = req.params.userId; // Assuming you pass the user ID as a route parameter
 
-      // Find the user by ID
-      const user = await B2BUser.findById(userId);
+    // Find the user by ID
+    const user = await B2BUser.findById(userId);
 
-      // If the user is not found, return an error
-      if (!user) {
-          return res.status(404).json({ message: 'User not found' });
-      }
+    // If the user is not found, return an error
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
-      // Extract category and subcategory from the user object
-      const { category, sub_category } = user;
+    // Extract categories and subcategories from the user object
+    const { categories, sub_category } = user;
 
-      // Return the category and subcategory in the response
-      res.status(200).json({ category, sub_category });
+    // Return the categories and subcategories in the response
+    res.status(200).json({ categories, sub_category });
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal Server Error' });
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };

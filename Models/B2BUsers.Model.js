@@ -77,15 +77,21 @@ const userSchema = new mongoose.Schema({
         filename: String, // Store the filename of the image
         path: String,     // Store the path to the image in the media folder
     }],
-    category: {
-        type:String,
-        required: true,
-      },
-    sub_category:[{
-          name: String, 
-          price: String,
-          unit:String 
-      }],
+    categories: [
+        {
+            name: {
+                type: String,
+                required: false,
+            },
+            sub_category: [
+                {
+                    name: String,
+                    price: String,
+                    unit: String,
+                },
+            ],
+        },
+    ],
       otp:{
         type:String,
         required:false
