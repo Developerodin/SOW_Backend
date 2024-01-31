@@ -258,37 +258,103 @@ export const addB2BSubcategory = async (req, res) => {
   }
 };
 
+// export const updateB2BSubcategoryByIndex = async (req, res) => {
+//   try {
+//     const { userId, subcategoryIndex } = req.params;
+//     const { name, price, unit } = req.body;
+
+//     if (!userId || !subcategoryIndex || !name || !price || !unit) {
+//       return res.status(400).json({ error: 'Missing required fields' });
+//     }
+
+//     const user = await B2BUser.findById(userId);
+
+//     if (!user) {
+//       return res.status(404).json({ error: 'User not found' });
+//     }
+
+//     if (subcategoryIndex < 0 || subcategoryIndex >= user.sub_category.length) {
+//       return res.status(400).json({ error: 'Invalid subcategory index' });
+//     }
+
+//     // Update subcategory fields based on the index
+//     const subcategory = user.sub_category[subcategoryIndex];
+//     subcategory.name = name;
+//     subcategory.price = price;
+//     subcategory.unit = unit;
+
+//     await user.save();
+
+//     res.status(200).json(user);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Error updating subcategory' });
+//   }
+// };
+
 export const updateB2BSubcategoryByIndex = async (req, res) => {
   try {
-    const { userId, subcategoryIndex } = req.params;
+    // Extract category ID and subcategory ID from request parameters
+    const categoryId = req.params.categoryId;
+    const subcategoryId = req.params.subcategoryId;
+
+    // Find the user by category ID
+    const user = await B2BUser.findOne({ 'categories._id': categoryId });
+
+    // Check if the user and category exist
+    if (!user) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'User or category not found',
+      });
+    }
+
+    // Find the index of the category in the user's categories array
+    const categoryIndex = user.categories.findIndex(category => category._id == categoryId);
+
+    // Check if the category index is valid
+    if (categoryIndex === -1) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Category not found',
+      });
+    }
+
+    // Find the index of the subcategory in the category's sub_category array
+    const subcategoryIndex = user.categories[categoryIndex].sub_category.findIndex(subCategory => subCategory._id == subcategoryId);
+
+    // Check if the subcategory index is valid
+    if (subcategoryIndex === -1) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Subcategory not found',
+      });
+    }
+
+    // Extract updated subcategory data from the request body
     const { name, price, unit } = req.body;
 
-    if (!userId || !subcategoryIndex || !name || !price || !unit) {
-      return res.status(400).json({ error: 'Missing required fields' });
-    }
+    // Update the subcategory with the new data
+    user.categories[categoryIndex].sub_category[subcategoryIndex].name = name || user.categories[categoryIndex].sub_category[subcategoryIndex].name;
+    user.categories[categoryIndex].sub_category[subcategoryIndex].price = price || user.categories[categoryIndex].sub_category[subcategoryIndex].price;
+    user.categories[categoryIndex].sub_category[subcategoryIndex].unit = unit || user.categories[categoryIndex].sub_category[subcategoryIndex].unit;
 
-    const user = await B2BUser.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    if (subcategoryIndex < 0 || subcategoryIndex >= user.sub_category.length) {
-      return res.status(400).json({ error: 'Invalid subcategory index' });
-    }
-
-    // Update subcategory fields based on the index
-    const subcategory = user.sub_category[subcategoryIndex];
-    subcategory.name = name;
-    subcategory.price = price;
-    subcategory.unit = unit;
-
+    // Save the user with the updated subcategory
     await user.save();
 
-    res.status(200).json(user);
+    // Send the response
+    res.status(200).json({
+      status: 'success',
+      message: 'Subcategory updated successfully',
+      data: user.categories[categoryIndex].sub_category[subcategoryIndex],
+    });
   } catch (error) {
+    // Handle any errors
     console.error(error);
-    res.status(500).json({ error: 'Error updating subcategory' });
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+    });
   }
 };
 
