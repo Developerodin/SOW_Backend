@@ -360,30 +360,62 @@ export const updateB2BSubcategoryByIndex = async (req, res) => {
 
 export const deleteB2BSubcategoryByIndex = async (req, res) => {
   try {
-    const { userId, subcategoryIndex } = req.params;
+    // Extract category ID and subcategory ID from request parameters
+    const categoryId = req.params.categoryId;
+    const subcategoryId = req.params.subcategoryId;
 
-    if (!userId || !subcategoryIndex) {
-      return res.status(400).json({ error: 'Missing required fields' });
-    }
+    // Find the user by category ID
+    const user = await B2BUser.findOne({ 'categories._id': categoryId });
 
-    const user = await B2BUser.findById(userId);
-
+    // Check if the user and category exist
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({
+        status: 'fail',
+        message: 'User or category not found',
+      });
     }
 
-    if (subcategoryIndex < 0 || subcategoryIndex >= user.sub_category.length) {
-      return res.status(400).json({ error: 'Invalid subcategory index' });
+    // Find the index of the category in the user's categories array
+    const categoryIndex = user.categories.findIndex(category => category._id == categoryId);
+
+    // Check if the category index is valid
+    if (categoryIndex === -1) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Category not found',
+      });
     }
 
-    // Remove subcategory based on the index
-    user.sub_category.splice(subcategoryIndex, 1);
+    // Find the index of the subcategory in the category's sub_category array
+    const subcategoryIndex = user.categories[categoryIndex].sub_category.findIndex(subCategory => subCategory._id == subcategoryId);
+
+    // Check if the subcategory index is valid
+    if (subcategoryIndex === -1) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Subcategory not found',
+      });
+    }
+
+    // Remove the subcategory from the array
+    user.categories[categoryIndex].sub_category.splice(subcategoryIndex, 1);
+
+    // Save the user with the updated subcategory
     await user.save();
 
-    res.status(200).json(user);
+    // Send the response
+    res.status(204).json({
+      status: 'success',
+      message: 'Subcategory deleted successfully',
+      data: null,
+    });
   } catch (error) {
+    // Handle any errors
     console.error(error);
-    res.status(500).json({ error: 'Error deleting subcategory' });
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+    });
   }
 };
 
