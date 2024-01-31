@@ -37,7 +37,7 @@ B2BUserRouter.put('/:id', updateB2BUser);
 // Delete a B2B user
 B2BUserRouter.delete('/:id', deleteB2BUser);
 
-B2BUserRouter.post('/:userId/subcategories', addB2BSubcategory);
+B2BUserRouter.post('/:categoryId/subcategories', addB2BSubcategory);
 
 // Update Subcategory by Index
 B2BUserRouter.patch('/:userId/subcategories/:subcategoryIndex', updateB2BSubcategoryByIndex);

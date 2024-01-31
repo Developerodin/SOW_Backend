@@ -173,29 +173,88 @@ export const deleteB2BUser = async (req, res) => {
 };
 
 
+// export const addB2BSubcategory = async (req, res) => {
+//   try {
+//     const { userId } = req.params;
+//     const { name, price, unit } = req.body;
+
+//     if (!userId || !name || !price || !unit) {
+//       return res.status(400).json({ error: 'Missing required fields' });
+//     }
+
+//     const user = await B2BUser.findById(userId);
+
+//     if (!user) {
+//       return res.status(404).json({ error: 'User not found' });
+//     }
+
+//     // Add new subcategory to the array
+//     user.sub_category.push({ name, price, unit });
+//     await user.save();
+
+//     res.status(201).json(user);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Error adding subcategory' });
+//   }
+// };
+
 export const addB2BSubcategory = async (req, res) => {
   try {
-    const { userId } = req.params;
+    // Extract category ID from request parameters
+    const categoryId = req.params.categoryId;
+
+    // Find the user by category ID
+    const user = await B2BUser.findOne({ 'categories._id': categoryId });
+
+    // Check if the user and category exist
+    if (!user) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'User or category not found',
+      });
+    }
+
+    // Find the index of the category in the user's categories array
+    const categoryIndex = user.categories.findIndex(category => category._id == categoryId);
+
+    // Check if the category index is valid
+    if (categoryIndex === -1) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Category not found',
+      });
+    }
+
+    // Extract subcategory data from the request body
     const { name, price, unit } = req.body;
 
-    if (!userId || !name || !price || !unit) {
-      return res.status(400).json({ error: 'Missing required fields' });
-    }
+    // Create a new subcategory object
+    const newSubcategory = {
+      name,
+      price,
+      unit,
+    };
 
-    const user = await B2BUser.findById(userId);
+    // Add the subcategory to the category
+    user.categories[categoryIndex].sub_category.push(newSubcategory);
 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    // Add new subcategory to the array
-    user.sub_category.push({ name, price, unit });
+    // Save the user with the updated subcategory
     await user.save();
 
-    res.status(201).json(user);
+    // Send the response
+    res.status(201).json({
+      status: 'success',
+      message: 'Subcategory added successfully',
+      data: newSubcategory,
+    });
   } catch (error) {
+    // Handle any errors
     console.error(error);
-    res.status(500).json({ error: 'Error adding subcategory' });
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+    });
   }
 };
 
