@@ -290,25 +290,39 @@ export const updateB2BCategory = async (req, res) => {
   }
 };
 
-export const getUserCategoryAndSubcategory = async (req, res) => {
-  try {
-    const userId = req.params.userId; // Assuming you pass the user ID as a route parameter
 
-    // Find the user by ID
+export const getUserCategoryAndSubcategory = async (req, res, next) => {
+  try {
+    // Extract user ID from request parameters or headers
+    const userId = req.params.userId; // Replace 'userId' with the actual parameter or header name
+
+    // Find user by ID
     const user = await B2BUser.findById(userId);
 
-    // If the user is not found, return an error
+    // Check if the user exists
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({
+        status: 'fail',
+        message: 'User not found',
+      });
     }
 
-    // Extract categories and subcategories from the user object
-    const { categories, sub_category } = user;
+    // Extract categories from the user object
+    const categories = user.categories || [];
 
-    // Return the categories and subcategories in the response
-    res.status(200).json({ categories, sub_category });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    // Send the categories in the response
+    res.status(200).json({
+      status: 'success',
+      data: {
+        categories,
+      },
+    });
+  } catch (err) {
+    // Handle any errors
+    console.error(err);
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+    });
   }
 };
