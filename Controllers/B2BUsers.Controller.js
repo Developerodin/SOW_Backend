@@ -517,3 +517,47 @@ export const addCategories = async (req, res) => {
       });
   }
 };
+
+
+export const deleteCategory = async (req, res) => {
+  try {
+      const userId = req.params.userId; // Assuming userId is in the route parameters
+      const categoryId = req.params.categoryId; // Assuming categoryId is in the route parameters
+
+      // Find the user by userId
+      const user = await B2BUser.findById(userId);
+
+      if (!user) {
+          return res.status(404).json({
+              success: false,
+              message: 'User not found',
+          });
+      }
+
+      // Find the index of the category in the categories array
+      const categoryIndex = user.categories.findIndex(category => category._id == categoryId);
+
+      if (categoryIndex === -1) {
+          return res.status(404).json({
+              success: false,
+              message: 'Category not found',
+          });
+      }
+
+      // Remove the category from the categories array
+      user.categories.splice(categoryIndex, 1);
+
+      // Save the updated user object
+      await user.save();
+
+      return res.status(200).json({
+          success: true,
+          message: 'Category deleted successfully',
+      });
+  } catch (error) {
+      return res.status(500).json({
+          success: false,
+          message: error.message,
+      });
+  }
+};
