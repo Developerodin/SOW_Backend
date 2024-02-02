@@ -483,3 +483,37 @@ export const getUserCategoryAndSubcategory = async (req, res, next) => {
     });
   }
 };
+
+
+export const addCategories = async (req, res) => {
+  try {
+      const userId = req.params.userId; // Assuming userId is in the route parameters
+      const { Data } = req.body;
+       const categoryData = JSON.parse(Data)
+      // Find the user by userId
+      const user = await B2BUser.findById(userId);
+
+      if (!user) {
+          return res.status(404).json({
+              success: false,
+              message: 'User not found',
+          });
+      }
+
+      // Add the new categories to the categories array
+      user.categories.push(...categoryData);
+
+      // Save the updated user object
+      await user.save();
+
+      return res.status(200).json({
+          success: true,
+          message: 'Categories added successfully',
+      });
+  } catch (error) {
+      return res.status(500).json({
+          success: false,
+          message: error.message,
+      });
+  }
+};
