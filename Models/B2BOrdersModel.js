@@ -25,6 +25,10 @@ const orderSchema = new mongoose.Schema({
       required: true,
       min: 1,
     },
+    description: {
+      type: String,
+      required: false,
+    }
   },
   totalAmount: {
     type: Number,
@@ -43,10 +47,6 @@ const orderSchema = new mongoose.Schema({
   otp: {
     type: Number,
     required: true,
-  },
-  description: {
-    type: String,
-    required: false,
   }
 });
 

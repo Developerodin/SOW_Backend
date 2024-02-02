@@ -3,9 +3,9 @@ import B2BOrder from "../Models/B2BOrdersModel.js";
 // Create a new B2B order
 export const createB2BOrder = async (req, res) => {
   try {
-    const { from, to, details, totalAmount, status,description } = req.body;
+    const { from, to, details, totalAmount, status } = req.body;
     const otp = Math.floor(1000 + Math.random() * 9000);
-    const newOrder = new B2BOrder({ from, to, details, totalAmount, status, otp,description });
+    const newOrder = new B2BOrder({ from, to, details, totalAmount, status, otp });
     const savedOrder = await newOrder.save();
     res.status(201).json(savedOrder);
   } catch (error) {
