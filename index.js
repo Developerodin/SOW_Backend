@@ -25,6 +25,8 @@ import { createB2BUser } from './Controllers/B2BUsers.Controller.js';
 import B2BorderRouter from './Routes/B2BOrders.Router.js';
 import { createUser } from './Controllers/Users.Controller.js';
 import ordersRouter from './Routes/Orders.Router.js';
+import planRouter from './Routes/Plans.Router.js';
+import invoiceRouter from './Routes/Invoices.Router.js';
 // import path from 'path';
 // import { fileURLToPath } from 'url';
 // import { dirname } from 'path';
@@ -139,6 +141,8 @@ app.use("/api/category",categoryRouter)
 app.use("/api/product",productRouter)
 app.use("/api/complaint",complaintRouter)
 app.use('/api/orders',ordersRouter)
+app.use('/api/plans',planRouter)
+app.use('/api/invoices',invoiceRouter)
 
 app.listen(port, () =>{
     connection();
