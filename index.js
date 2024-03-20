@@ -34,12 +34,12 @@ import invoiceRouter from './Routes/Invoices.Router.js';
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = dirname(__filename);
 const app = express()
-const port = 4000
+const port = 5000
 
 app.use(bodyParser.json(), cors())
 app.options('*', cors())
 
-app.get('/', (req, res) => {
+app.get('/api/', (req, res) => {
     res.json({
       message: "Sow Server is running ...."
     })
@@ -74,8 +74,8 @@ app.get('/', (req, res) => {
 // app.post('/student_login',loginUser)
 // app.post('/student_signup',upload.array('images', 1),createUser)
 // app.post('/teacher_login',loginTeacher)
-app.post('/b2b',upload.array('images', 4),createB2BUser)
-app.post('/user',upload.array('images', 1), createUser);
+app.post('/api/b2b',upload.array('images', 4),createB2BUser)
+app.post('/api/user',upload.array('images', 1), createUser);
 // app.use('/admin',adminRouter)
 
 // JWT Middleware
@@ -133,7 +133,7 @@ async function fileExists(filePath) {
   }
 }
 
-app.use("/admin",adminRouter);
+app.use("/api/admin",adminRouter);
 app.use("/api/b2b",B2BUserRouter)
 app.use("/api/b2b_orders",B2BorderRouter)
 app.use("/api/users",userRouter)
